@@ -8,7 +8,7 @@ if (!isset($_SESSION['nasabah'])) {
 include(__DIR__.'/../template/navbar_header.php');
 include(__DIR__.'/../template/sitebar.php');
 
-include(__DIR__.'./../Controller/MasterController.php');
+include(__DIR__.'/../Controller/RiwayatController.php');
 
 // var_dum;p(adminSaldo()->SALDO);
 ?>
@@ -34,7 +34,7 @@ include(__DIR__.'./../Controller/MasterController.php');
 						<div class="col-md-12">
 							<div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">Total Saldo : <?= rupiah(adminSaldo()->SALDO) ?></h4>
+                                    <h4 class="card-title">Total Transaksi : <?= rupiah(saldoNasabah($_SESSION['nasabah']->id_user)->SALDO) ?></h4>
 								</div>
 								<div class="card-body">
 									<div class="table-responsive">
@@ -42,29 +42,34 @@ include(__DIR__.'./../Controller/MasterController.php');
 											<thead>
 												<tr>
 													<th>No</th>
-													<th>Nama Nasabah</th>
-													<th>Pengeluaran</th>
-													<th>Pemasukan</th>
-													<th>Total</th>
+													<th>ID Transaksi</th>
+													<th>Kategori Transaksi</th>
+													<th>Nominal</th>
 													<th>Keterangan</th>
 													<th>Waktu</th>
-													<th>Action</th>
+													<th>Status</th>
 												</tr>
 											</thead>
                                             <?php $no =1;?>
 											<tbody>
-                                                <?php foreach (adminData() as $data) { ?>
+                                                <?php $conn = globalfun();
+												$id = $_SESSION['nasabah'];
+												foreach (mysqli_fetch_all(mysqli_query($conn,
+												"SELECT * FROM riwayat_transaksi WHERE id_user='$id->id_user'")) as $data) { ?>
                                                 <tr>
                                                     <!-- <?php var_dump($data)?> -->
 													<td><?= $no++?></td>
-													<td><?= $data[3]?></td>
+													<td><?= $data[2] ?></td>
+													<td><?= ($data[3] == 'pemasukan')? 'Tabungan Masuk':'Tabungan Keluar'?></td>
 													<td><?= rupiah($data[4])?></td>
-													<td><?= rupiah($data[5])?></td>
-													<td><?= rupiah($data[4] + $data[5]);?></td>
-													<td><?= $data[6];?></td>
+													<td><?= $data[5];?></td>
 													<td><?= $data[7];?></td>
 													<td>
-                                                        <a href="<?= base_url('dashboard/detail-master.php?detail=').$data['2']?>" class="btn btn-warning btn-sm"><i class="fas fa-info-circle" style="margin-right: 10px;"></i>Detail</a>
+														<?php if ($data[6] == '0') { ?>
+														<span class="badge badge-pill badge-warning">Pending</span>
+														<?php } else { ?>
+															<span class="badge badge-pill badge-success">Approve</span>
+														<?php } ?>
                                                     </td>
 												</tr>
                                                 <?php } ?>

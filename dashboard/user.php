@@ -177,9 +177,9 @@ if (isset($_POST['edit'])) {
                                     <div class="form-group">
                                         <label for="formGroupExampleInput2">Role</label>
                                         <select class="form-control" name="role" aria-label="Default select example">
-                                            <option selected disabled>Pilih Salah Satu..</option>
-                                            <option value="1">Admin</option>
-                                            <option value="0">Nasabah</option>
+                                            <option disabled>Pilih Salah Satu..</option>
+                                            <option <?php echo ($data['7'] == '0') ? 'selected':'' ?> value="0">Nasabah</option>
+                                            <option <?php echo ($data['7'] == '1') ? 'selected':'' ?> value="1">Admin</option>
                                         </select>
                                     </div>
                                     <div class="form-group">

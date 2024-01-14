@@ -112,6 +112,32 @@
 							</span>
 							<h4 class="text-section">NASABAH</h4>
 						</li>
+						<li class="nav-item
+						<?php 
+							$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+							$active_class = (strpos($actual_link, 'history') !== false) ? 'active' : '';
+							echo $active_class;
+						?>">
+						<?php if (isset($_SESSION['users'])) {?>
+							<a href="<?= base_url('dashboard/history.php')?>">
+								<i class="fas fa-history"></i>
+								<p>History Transaksi</p>
+							</a>
+						<?php } else { ?>
+							<a href="<?= base_url('nasabah/history.php')?>">
+								<i class="fas fa-history"></i>
+								<p>History Transaksi</p>
+							</a>
+						<?php }?>
+						</li>
+						<?php if (isset($_SESSION['users'])) {?>
+							<li class="nav-item">
+								<a href="boards.html">
+									<i class="fas fa-th-list"></i>
+									<p>Boards</p>
+								</a>
+							</li>
+						<?php } ?>
 						<?php if (isset($_SESSION['users'])) { ?>
 						<li class="nav-item">
 							<a data-toggle="collapse" href="#messages-app-nav">
@@ -127,8 +153,8 @@
 										</a>
 									</li>
 									<li>
-										<a href="conversations.html">
-											<span class="sub-item">Conversations</span>
+										<a href="<?= base_url('dashboard/detail-user.php')?>">
+											<span class="sub-item">Detail User</span>
 										</a>
 									</li>
 								</ul>
@@ -149,45 +175,21 @@
 											</a>
 										</li>
 										<li>
-											<a href="conversations.html">
-												<span class="sub-item">Conversations</span>
+											<a href="<?= base_url('nasabah/detail-user.php')?>">
+												<span class="sub-item">Detail User</span>
 											</a>
 										</li>
 									</ul>
 								</div>
 							</li>
 						<?php } ?>
-						<li class="nav-item
-						<?php 
-							$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-							$active_class = (strpos($actual_link, 'history') !== false) ? 'active' : '';
-							echo $active_class;
-						?>">
-						<?php if (isset($_SESSION['users'])) {?>
-							<a href="<?= base_url('dashboard/history.php')?>">
-								<i class="fas fa-history"></i>
-								<p>History Transaksi</p>
-							</a>
-						<?php } else { ?>
-							<a href="<?= base_url('nasabah/history.php')?>">
-								<i class="fas fa-history"></i>
-								<p>History Transaksi</p>
-							</a>
-						<?php }?>
-						</li>
-						<li class="nav-item">
-							<a href="boards.html">
-								<i class="fas fa-th-list"></i>
-								<p>Boards</p>
-							</a>
-						</li>
-						<li class="nav-item">
+						<!-- <li class="nav-item">
 							<a href="invoice.html">
 								<i class="fas fa-file-invoice-dollar"></i>
 								<p>Invoices</p>
 								<span class="badge badge-count">6</span>
 							</a>
-						</li>
+						</li> -->
 					</ul>
 				</div>
 			</div>
