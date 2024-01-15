@@ -67,9 +67,11 @@ include(__DIR__.'/../Controller/RiwayatController.php');
 													<td>
 														<?php if ($data[6] == '0') { ?>
 														<span class="badge badge-pill badge-warning">Pending</span>
-														<?php } else { ?>
-															<span class="badge badge-pill badge-success">Approve</span>
-														<?php } ?>
+														<?php } elseif ($data[6] == '3') { ?>
+															<span class="badge badge-pill badge-danger">Reject</span>
+                                                        <?php } else { ?>
+                                                            <span class="badge badge-pill badge-success">Accept</span>
+                                                        <?php } ?>
                                                     </td>
 												</tr>
                                                 <?php } ?>

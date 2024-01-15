@@ -9,8 +9,6 @@ include(__DIR__.'/../template/navbar_header.php');
 include(__DIR__.'/../template/sitebar.php');
 
 include(__DIR__.'/../Controller/RiwayatController.php');
-
-// var_dum;p(adminSaldo()->SALDO);
 ?>
 <div class="container">
 				<div class="page-inner">

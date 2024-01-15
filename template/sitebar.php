@@ -141,8 +141,13 @@
 						<?php } ?>
 						</li>
 						<?php if (isset($_SESSION['users'])) { ?>
-							<li class="nav-item">
-								<a href="<?= base_url('dashboard/pengeluaran.php')?>">
+							<li class="nav-item
+							<?php 
+								$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+								$active_class = (strpos($actual_link, 'bunga') !== false) ? 'active' : '';
+								echo $active_class;
+							?>">
+								<a href="<?= base_url('dashboard/bunga.php')?>">
 								<i class="fas fa-percent"></i>
 										<p>Bunga</p>
 								</a>
@@ -172,7 +177,7 @@
 							</a>
 						<?php }?>
 						</li>
-						<?php if (isset($_SESSION['users'])) {?>
+						<?php if (isset($_SESSION['sds'])) {?>
 							<li class="nav-item">
 								<a href="boards.html">
 									<i class="fas fa-th-list"></i>

@@ -40,7 +40,10 @@ function acc($data) {
     }
 }
 
-function reject() {
-    
+function reject($data) {
+    $conn       = globalfun();
+    $id_user    = htmlspecialchars($data['id_transaksi']);
+
+    return mysqli_query($conn, "UPDATE riwayat_transaksi SET acc='3' WHERE id_transaksi='$id_user'");
 }
 ?>

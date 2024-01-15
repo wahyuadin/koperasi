@@ -15,6 +15,12 @@ if (isset($_POST['acc'])) {
         set_flash_data('berhasil', 'Data Berhasil Disimpan!');
     }  
 }
+
+if (isset($_POST['reject'])) {
+    if (reject($_POST)) {
+        set_flash_data('berhasil', 'Data Berhasil Disimpan!');
+    }
+}
 ?>
 <div class="container">
 				<div class="page-inner">
@@ -92,12 +98,12 @@ if (isset($_POST['acc'])) {
                                                     <td>
                                                         <!-- <a style="color: white;" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit<?=$data['2']?>"><i class="fas fa-check-circle" style="margin-right: 10px;"></i>Accept</a> -->
                                                         <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#acc<?= $data[0]?>"><i class="fas fa-check-circle" style="margin-right: 10px;"></i>Accept</button>
-                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hapus<?=$data['1']?>"><i class="fas fa-times-circle" style="margin-right: 10px;"></i>Reject</button>
+                                                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hapus<?=$data[0]?>"><i class="fas fa-times-circle" style="margin-right: 10px;"></i>Reject</button>
                                                     </td>
 												</tr>
 
                                                 <!-- Modal Reject -->
-                                                <div class="modal fade" id="hapus<?=$data['1']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal fade" id="hapus<?=$data[0]?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                     <div class="modal-header">
@@ -106,15 +112,14 @@ if (isset($_POST['acc'])) {
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <input type="text" name="id" value="<?= $data['2']?>" readonly hidden>
+                                                    
                                                     <div class="modal-body">
                                                         Apakah anda yakin mereject data ?
                                                     </div>
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                                         <form action="" method="POST">
-                                                        <input type="text" name="id" value="<?=$data['2']?>" readonly hidden>
-                                                        <input type="text" name="id_user" value="<?=$_SESSION['users']->id_user?>" readonly hidden>
+                                                        <input type="text" name="id_transaksi" value="<?= $data['0']?>" readonly hidden>
                                                         <button type="submit" name="reject" class="btn btn-danger">Reject</button>
                                                         </form>
                                                     </div>
@@ -132,7 +137,6 @@ if (isset($_POST['acc'])) {
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
                                                     </div>
-                                                    <input type="text" name="id_user" value="<?= $data?>" readonly hidden>
                                                     <div class="modal-body">
                                                         Apakah anda yakin mengaprove data ?
                                                     </div>

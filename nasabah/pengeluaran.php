@@ -10,9 +10,15 @@ include(__DIR__.'/../template/sitebar.php');
 
 include(__DIR__.'./../Controller/PengeluaranController.php');
 
+
+// var_dump(countSaldo($_SESSION['nasabah']->id_user)->SALDO);
 if (isset($_POST['tambah'])) {
-    if (adminInsert($_POST)) {
+    if (htmlspecialchars($_POST['nominal']) <= nasabahPemasukan($_SESSION['nasabah']->id_user)->SALDO) {
+      if (nasabahInsert($_POST)) {
         set_flash_data('berhasil', 'Data Berhasil Disimpan!');
+      }
+    } else {
+      set_flash_data('gagal', 'Saldo Tidak Cukup!');
     }
 }
 
@@ -67,7 +73,7 @@ if (isset($_POST['edit'])) {
                   <h4 class="card-title">Total pengeluaran : <?= rupiah(nasabahPengeluaran($_SESSION['nasabah']->id_user)->SALDO) ?></h4>
 								</div>
 								<div class="card-body">
-                                    <!-- <button class="btn btn-secondary btn-border btn-sm mb-3" data-toggle="modal" data-target="#tambah"><i class="fas fa-plus-circle" style="margin-right: 8px;"></i>Tambah Data</button> -->
+                    <button class="btn btn-secondary btn-border btn-sm mb-3" data-toggle="modal" data-target="#tambah"><i class="fas fa-plus-circle" style="margin-right: 8px;"></i>Tambah Data</button>
 									<div class="table-responsive">
 										<table id="basic-datatables" class="display table table-striped table-hover" >
 											<thead>
@@ -132,18 +138,14 @@ if (isset($_POST['edit'])) {
                                     <div class="form-group">
                                         <label for="formGroupExampleInput2">Nama Nasabah</label>
                                         <input type="text" class="form-control" name="nama" value="<?= $data['3']?>" id="formGroupExampleInput2" placeholder="Nama Nasabah" required readonly>
-                                        <input type="text" class="form-control" name="id" value="<?= $data['2']?>" id="formGroupExampleInput2" placeholder="Nama Nasabah" required readonly hidden>
+                                        <input type="text" class="form-control" name="id" value="<?= $data['1']?>" id="formGroupExampleInput2" placeholder="Nama Nasabah" required readonly hidden>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="formGroupExampleInput2">Nominal</label>
-                                        <input type="number" class="form-control" name="nominal" value="<?= $data['5']?>" id="formGroupExampleInput2" placeholder="Nominal" required>
-                                    </div>
+                                    
                                     <div class="form-group">
                                         <label for="formGroupExampleInput2">Keterangan</label>
                                         <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan" required><?= $data['6']?></textarea>
                                         <!-- <input type="text" class="form-control" name="ket" placeholder="Keterangan" requireq> -->
                                     </div>
-                                
                               </div>
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -178,26 +180,29 @@ if (isset($_POST['edit'])) {
         </button>
       </div>
       <div class="modal-body">
+        <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;"></div>
         <form method="POST" action="">
             <div class="form-group">
               <label for="formGroupExampleInput2">Nama Nasabah</label>
-              <select name="nama" class="form-control" aria-label="Default select example" required>
-                <option selected disabled>Pilih Salah Satu...</option>
-               <?php $conn = globalfun(); foreach (mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM pemasukan")) as $data) { ?>
-                <option value="<?=$data[3]?>"><?=$data[3]?></option>
-                <?php }?> 
-              </select>
-                <!-- <input type="text" class="form-control" name="nama" id="formGroupExampleInput2" placeholder="Nama Nasabah" required> -->
+              <input type="text" name="nama" class="form-control" aria-label="Default select example" required placeholder="Nama Nasabah" value="<?php echo $_SESSION['nasabah']->nama?>" readonly>
             </div>
             <div class="form-group">
-                <label for="formGroupExampleInput2">Nominal</label>
-                <input type="number" class="form-control" name="nominal" id="formGroupExampleInput2" placeholder="Nominal" required>
-            </div>
-            <div class="form-group">
-                <label for="formGroupExampleInput2">Keterangan</label>
-                <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan" required></textarea>
-                <!-- <input type="text" class="form-control" name="ket" placeholder="Keterangan" requireq> -->
-            </div>
+            <label for="formGroupExampleInput2">Kategori</label>
+            <select class="form-control" name="kategori" id="kategoriSelect" onchange="showFields()">
+              <option selected disabled>Pilih Salah Satu...</option>
+              <option value="tabungan">Tabungan</option>
+              <option value="pinjaman">Pinjaman</option>
+            </select>
+          </div>
+
+          <div class="form-group" id="nominalKeteranganFields" style="display: none;">
+            <label for="formGroupExampleInput2">Nominal</label>
+            <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Jumlah Tabungan Anda : <?= rupiah(countSaldo($_SESSION['nasabah']->id_user)->SALDO)?>" required oninput="validateNominal()">
+          </div>
+          <div class="form-group" id="keteranganFields" style="display: none;">
+            <label for="formGroupExampleInput2">Keterangan</label>
+            <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan" required></textarea>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

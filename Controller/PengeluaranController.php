@@ -120,4 +120,39 @@ function nasabahData($data) {
     $conn = globalfun();
     return mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM pengeluaran WHERE id_user='$data'"));
 }
+
+function nasabahPemasukan($data) {
+    $conn   = globalfun();
+    return mysqli_fetch_object(mysqli_query($conn, "SELECT SUM(nominal) as SALDO FROM pemasukan WHERE id_user='$data'"));  
+}
+
+function countSaldo($data) {
+    $conn       = globalfun();
+    return mysqli_fetch_object(mysqli_query($conn, "SELECT (SUM(pemasukan))-(SUM(pengeluaran)) as SALDO FROM master WHERE id_user='$data'"));
+}
+
+function nasabahInsert($data) {
+    $conn       = globalfun();
+    $nama       = htmlspecialchars($data['nama']);
+    $nominal    = htmlspecialchars($data['nominal']);
+    $ket        = htmlspecialchars($data['ket']);
+
+    $query = mysqli_query($conn, "SELECT RIGHT(id_user, 3) as kode FROM users ORDER BY id_user DESC LIMIT 1");
+        $result = $query->fetch_object();
+        if ($result) {
+            $kode = intval($result->kode) + 1;
+        } else {
+            $kode = 1;
+        }
+        $kodemax = str_pad($kode, 5, rand(5, 998), STR_PAD_LEFT);
+        $kodejadi = "TRS-" . $kodemax;
+        $id_user = $_SESSION['nasabah']->id_user;
+
+    $result1 = mysqli_query($conn, "INSERT INTO pengeluaran (id_user,id_transaksi,nama,nominal,ket) VALUES ('$id_user','$kodejadi','$nama','$nominal','$ket')");
+    if ($result1) {
+        mysqli_query($conn, "INSERT INTO riwayat_transaksi (id_user,id_transaksi,kategori,nominal,ket,acc) VALUES ('$id_user','$kodejadi','pengeluaran','$nominal','$ket','1')");
+        return mysqli_query($conn, "INSERT INTO master (id_user,id_transaksi,nama,pengeluaran,ket) VALUES ('$id_user','$kodejadi','$nama','$nominal','$ket')");
+    }
+}
+
 ?>  
