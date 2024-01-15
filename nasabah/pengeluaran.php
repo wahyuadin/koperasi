@@ -194,7 +194,7 @@ if (isset($_POST['edit'])) {
               <option value="pinjaman">Pinjaman</option>
             </select>
           </div>
-
+          <!-- tabungan -->
           <div class="form-group" id="nominalKeteranganFields" style="display: none;">
             <label for="formGroupExampleInput2">Nominal</label>
             <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Jumlah Tabungan Anda : <?= rupiah(countSaldo($_SESSION['nasabah']->id_user)->SALDO)?>" required oninput="validateNominal()">
@@ -203,6 +203,22 @@ if (isset($_POST['edit'])) {
             <label for="formGroupExampleInput2">Keterangan</label>
             <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan" required></textarea>
           </div>
+          <!-- end tabungan -->
+          <!-- pinjaman -->
+          <div class="form-group" id="pinjamanNominal" style="display: none;">
+            <label>Nominal</label>
+            <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Limit Peminjaman Anda : <?= rupiah(countSaldo($_SESSION['nasabah']->id_user)->SALDO)?>" required oninput="validateNominal()">
+          </div>
+          <div class="form-group" id="tenorFields" style="display: none;">
+            <label for="tenor">Tenor</label>
+            <select name="tenor" class="form-control" id="tenor" onchange="validateNominal()">
+              <option value="1">1 Bulan</option>
+              <option value="3">3 Bulan</option>
+              <option value="6">6 Bulan</option>
+              <option value="12">12 Bulan</option>
+            </select>
+          </div>
+          <!-- end pinjaman -->
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

@@ -184,32 +184,40 @@
 		var kategoriSelect = document.getElementById("kategoriSelect");
 		var nominalKeteranganFields = document.getElementById("nominalKeteranganFields");
 		var keteranganFields = document.getElementById("keteranganFields");
+		var tenorFields = document.getElementById("tenorFields");
 
 		if (kategoriSelect.value === "tabungan") {
-		nominalKeteranganFields.style.display = "block";
-		keteranganFields.style.display = "block";
+			nominalKeteranganFields.style.display = "block";
+			keteranganFields.style.display = "block";
+			pinjamanNominal.style.display = "none";
+			tenorFields.style.display = "none";
+		} else if (kategoriSelect.value === "pinjaman") {
+			pinjamanNominal.style.display = "block";
+			tenorFields.style.display = "block";
+
+			nominalKeteranganFields.style.display = "none";
+			keteranganFields.style.display = "none";
 		} else {
-		nominalKeteranganFields.style.display = "none";
-		keteranganFields.style.display = "none";
+			pinjamanNominal.style.display = "none";
+			nominalKeteranganFields.style.display = "none";
+			keteranganFields.style.display = "none";
+			tenorFields.style.display = "none";
 		}
+
 	}
 	function validateNominal() {
-    // Ambil nilai saldo dari fungsi atau sumber data Anda
     var saldoNasabah = <?= countSaldo($_SESSION['nasabah']->id_user)->SALDO ?>;
     var inputNominal = document.getElementById("nominal").value;
     saldoNasabah = parseFloat(saldoNasabah);
     inputNominal = parseFloat(inputNominal);
     var batasMaksimal = <?= countSaldo($_SESSION['nasabah']->id_user)->SALDO ?>;
-	console.log(batasMaksimal);
 
     if (inputNominal > batasMaksimal) {
       var errorAlert = document.getElementById("errorAlert");
       errorAlert.innerHTML = "Nominal Melebihi Batas Saldo!";
       errorAlert.style.display = "block";
 
-      // Kosongkan nilai input atau tambahkan logika lain sesuai kebutuhan Anda
     } else {
-      // Sembunyikan pesan kesalahan jika nilai input sesuai
       var errorAlert = document.getElementById("errorAlert");
       errorAlert.style.display = "none";
     }
