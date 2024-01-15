@@ -104,6 +104,7 @@ if (isset($_POST['edit'])) {
                                   </button>
                                 </div>
                                 <input type="text" name="id" value="<?= $data['2']?>" readonly hidden>
+                                <input type="text" name="id_user" value="<?=$_SESSION['users']->id_user?>" hidden readonly>
                                 <div class="modal-body">
                                   Apakah anda yakin menghapus data ?
                                 </div>
@@ -111,6 +112,7 @@ if (isset($_POST['edit'])) {
                                   <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                   <form action="" method="POST">
                                     <input type="text" name="id" value="<?=$data['2']?>" readonly hidden>
+                                    <input type="text" name="id_user" value="<?=$_SESSION['users']->id_user?>" readonly hidden>
                                     <button type="submit" name="hapus" class="btn btn-danger">Hapus</button>
                                   </form>
                                 </div>
@@ -133,6 +135,7 @@ if (isset($_POST['edit'])) {
                                         <label for="formGroupExampleInput2">Nama Nasabah</label>
                                         <input type="text" class="form-control" name="nama" value="<?= $data['3']?>" id="formGroupExampleInput2" placeholder="Nama Nasabah" required readonly>
                                         <input type="text" class="form-control" name="id" value="<?= $data['2']?>" id="formGroupExampleInput2" placeholder="Nama Nasabah" required readonly hidden>
+                                        <input type="text" class="form-control" name="id_user" value="<?= $data['1']?>" id="formGroupExampleInput2" placeholder="Nama Nasabah" required readonly hidden>
                                     </div>
                                     <div class="form-group">
                                         <label for="formGroupExampleInput2">Nominal</label>

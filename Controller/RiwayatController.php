@@ -12,5 +12,10 @@ function saldoNasabah($data) {
     return mysqli_fetch_object(mysqli_query($conn, "SELECT SUM(nominal) as SALDO FROM riwayat_transaksi WHERE id_user='$data'"));
 }
 
+// ADMIN
+function saldoAdmin() {
+    $conn = globalfun();
+    return mysqli_fetch_object(mysqli_query($conn, "SELECT SUM(nominal) as SALDO FROM riwayat_transaksi"));
+}
 
 ?>

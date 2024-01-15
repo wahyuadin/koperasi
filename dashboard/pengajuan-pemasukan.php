@@ -1,6 +1,6 @@
 <?php
 session_start();
-$judul = 'Laporan Pemasukan';
+$judul = 'Pengajuan Pemasukan';
 include(__DIR__.'/../template/header.php');
 if (!isset($_SESSION['users'])) {
     return header('location:'. base_url());
@@ -70,10 +70,8 @@ if (isset($_POST['edit'])) {
                       <?= $berhasil;?>
                   </div>
                   <?php } ?>
-                  <h4 class="card-title">Total Pemasukan : <?= rupiah(adminPemasukan()->SALDO) ?></h4>
 								</div>
 								<div class="card-body">
-                                    <button class="btn btn-secondary btn-border btn-sm mb-3" data-toggle="modal" data-target="#tambah"><i class="fas fa-plus-circle" style="margin-right: 8px;"></i>Tambah Data</button>
 									<div class="table-responsive">
 										<table id="basic-datatables" class="display table table-striped table-hover" >
 											<thead>

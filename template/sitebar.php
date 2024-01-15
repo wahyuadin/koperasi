@@ -77,10 +77,27 @@
 							echo $active_class;
 						?>">
 						<?php if (isset($_SESSION['users'])) { ?>
-							<a href="<?= base_url('dashboard/pemasukan.php')?>">
-								<i class="far fa-file-excel"></i>
-								<p>Pemasukan Report</p>
-							</a>
+							<li class="nav-item">
+								<a data-toggle="collapse" href="#messages-app-nav">
+									<i class="far fa-file-excel"></i>
+									<p>Pemasukan Report</p>
+									<span class="caret"></span>
+								</a>
+								<div class="collapse" id="messages-app-nav">
+									<ul class="nav nav-collapse">
+										<li>
+											<a href="<?= base_url('dashboard/pemasukan.php')?>">
+												<span class="sub-item">Data Pemasukan</span>
+											</a>
+										</li>
+										<li>
+											<a href="<?= base_url('dashboard/pengajuan-pemasukan.php')?>">
+												<span class="sub-item">Pengajuan Pemasukan</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
 							<?php } else { ?>
 								<a href="<?= base_url('nasabah/pemasukan.php')?>">
 									<i class="far fa-file-excel"></i>
@@ -95,10 +112,27 @@
 							echo $active_class;
 						?>">
 						<?php if (isset($_SESSION['users'])) { ?>
-							<a href="<?= base_url('dashboard/pengeluaran.php')?>">
-								<i class="fas fa-file-contract"></i>
-								<p>Pengeluaran Report</p>
-							</a>
+							<li class="nav-item">
+								<a data-toggle="collapse" href="#pengeluaran">
+									<i class="fas fa-file-contract"></i>
+									<p>Pengeluaran Report</p>
+									<span class="caret"></span>
+								</a>
+								<div class="collapse" id="pengeluaran">
+									<ul class="nav nav-collapse">
+										<li>
+											<a href="<?= base_url('dashboard/pengeluaran.php')?>">
+												<span class="sub-item">Data Pengeluaran</span>
+											</a>
+										</li>
+										<li>
+											<a href="<?= base_url('nasabah/detail-user.php')?>">
+												<span class="sub-item">Pengajuan Pengeluaran</span>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</li>
 							<?php } else { ?>
 								<a href="<?= base_url('nasabah/pengeluaran.php')?>">
 									<i class="fas fa-file-contract"></i>
@@ -106,6 +140,14 @@
 								</a>
 						<?php } ?>
 						</li>
+						<?php if (isset($_SESSION['users'])) { ?>
+							<li class="nav-item">
+								<a href="<?= base_url('dashboard/pengeluaran.php')?>">
+								<i class="fas fa-percent"></i>
+										<p>Bunga</p>
+								</a>
+							</li>
+						<?php }?>
 						<li class="nav-section">
 							<span class="sidebar-mini-icon">
 								<i class="fa fa-ellipsis-h"></i>
@@ -140,12 +182,12 @@
 						<?php } ?>
 						<?php if (isset($_SESSION['users'])) { ?>
 						<li class="nav-item">
-							<a data-toggle="collapse" href="#messages-app-nav">
+							<a data-toggle="collapse" href="#user">
 								<i class="far fa-user"></i>
 								<p>User</p>
 								<span class="caret"></span>
 							</a>
-							<div class="collapse" id="messages-app-nav">
+							<div class="collapse" id="user">
 								<ul class="nav nav-collapse">
 									<li>
 										<a href="<?= base_url('dashboard/user.php')?>">
@@ -162,12 +204,12 @@
 						</li>
 						<?php } else { ?>
 							<li class="nav-item">
-								<a data-toggle="collapse" href="#messages-app-nav">
+								<a data-toggle="collapse" href="#user">
 									<i class="far fa-user"></i>
 									<p>User</p>
 									<span class="caret"></span>
 								</a>
-								<div class="collapse" id="messages-app-nav">
+								<div class="collapse" id="user">
 									<ul class="nav nav-collapse">
 										<li>
 											<a href="<?= base_url('nasabah/user.php')?>">

@@ -34,29 +34,66 @@ function adminInsert($data) {
 
     $result1 = mysqli_query($conn, "INSERT INTO pemasukan (id_user,id_transaksi,nama,nominal,ket) VALUES ('$id_user','$kodejadi','$nama','$nominal','$ket')");
     if ($result1) {
+        mysqli_query($conn, "INSERT INTO riwayat_transaksi (id_user,id_transaksi,kategori,nominal,ket,acc) VALUES ('$id_user','$kodejadi','pemasukan','$nominal','$ket','1')");
         return mysqli_query($conn, "INSERT INTO master (id_user,id_transaksi,nama,pemasukan,ket) VALUES ('$id_user','$kodejadi','$nama','$nominal','$ket')");
     }
 }
 
 
 function adminHapus($id) {
-    $conn= globalfun();
-    $id = $id['id'];
-    $result =  mysqli_query($conn,"DELETE FROM pemasukan WHERE id_transaksi = '$id'");  
-    if ($result) {
-        return mysqli_query($conn,"DELETE FROM master WHERE id_transaksi = '$id'");  
+    $conn = globalfun();
+    
+    if (is_array($id) && array_key_exists('id_user', $id)) {
+        $id_transaksi = htmlspecialchars($id['id']);
+        $id_user = htmlspecialchars($id['id_user']);
+
+        $stmt_delete_pemasukan = mysqli_prepare($conn, "DELETE FROM pemasukan WHERE id_transaksi = ?");
+        mysqli_stmt_bind_param($stmt_delete_pemasukan, "s", $id_transaksi);
+        $result_delete_pemasukan = mysqli_stmt_execute($stmt_delete_pemasukan);
+
+        if ($result_delete_pemasukan) {
+            $stmt_insert_riwayat = mysqli_prepare($conn, "INSERT INTO riwayat_transaksi (id_user, id_transaksi, kategori, nominal, ket, acc) VALUES (?, ?, 'pemasukan', '0', 'Hapus Data By Admin', '1')");
+            mysqli_stmt_bind_param($stmt_insert_riwayat, "ss", $id_user, $id_transaksi);
+            $result_insert_riwayat = mysqli_stmt_execute($stmt_insert_riwayat);
+
+            if ($result_insert_riwayat) {
+                $stmt_delete_master = mysqli_prepare($conn, "DELETE FROM master WHERE id_transaksi = ?");
+                mysqli_stmt_bind_param($stmt_delete_master, "s", $id_transaksi);
+                $result_delete_master = mysqli_stmt_execute($stmt_delete_master);
+
+                if ($result_delete_master) {
+                    mysqli_stmt_close($stmt_delete_pemasukan);
+                    mysqli_stmt_close($stmt_insert_riwayat);
+                    mysqli_stmt_close($stmt_delete_master);
+                    mysqli_close($conn);
+
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    } else {
+        return false;
     }
 }
+
 
 function adminEdit($data) {
     $conn       = globalfun();
     $id         = htmlspecialchars($data['id']);
+    $id_user    = htmlspecialchars($data['id_user']);
     $nama       = htmlspecialchars($data['nama']);
     $nominal    = htmlspecialchars($data['nominal']);
     $ket        = htmlspecialchars($data['ket']);
     
     $result = mysqli_query($conn, "UPDATE pemasukan SET nama = '$nama', nominal='$nominal', ket = '$ket'  WHERE id_transaksi = '$id'");
     if ($result) {
+        mysqli_query($conn, "INSERT INTO riwayat_transaksi (id_user,id_transaksi,kategori,nominal,ket,acc) VALUES ('$id_user','$id','pemasukan','$nominal','Edit Data - $ket','1')");
         return mysqli_query($conn, "UPDATE master SET nama = '$nama', pemasukan='$nominal', ket = '$ket'  WHERE id_transaksi = '$id'");
     }
 }
