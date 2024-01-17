@@ -10,21 +10,33 @@ include(__DIR__.'/../template/sitebar.php');
 
 include(__DIR__.'./../Controller/PengeluaranController.php');
 
-
 if (isset($_POST['tambah'])) {
-  var_dump($_POST['pinjaman']); die;
-    if (htmlspecialchars($_POST['nominal']) <= countSaldo($_SESSION['nasabah']->id_user)->SALDO) {
-      if (nasabahInsert($_POST)) {
-        set_flash_data('berhasil', 'Data Berhasil Disimpan!');
-      }
-    } elseif (htmlspecialchars($_POST['pinjaman']) <= number_format(nasabahTenor()->SALDO * 10 / 100,0,'.','')) {
+  $nominal  = isset($_POST['nominal']) ? htmlspecialchars($_POST['nominal']) : NULL;
+  $pinjaman = isset($_POST['pinjaman']) ? htmlspecialchars($_POST['pinjaman']) : NULL;
+
+  if ($nominal !== NULL) {
+    $saldo = countSaldo($_SESSION['nasabah']->id_user)->SALDO;
+    if ($nominal <= $saldo) {
       if (nasabahInsert($_POST)) {
         set_flash_data('berhasil', 'Data Berhasil Disimpan!');
       }
     } else {
       set_flash_data('gagal', 'Saldo Tidak Cukup!');
     }
+  } elseif ($pinjaman !== NULL) {
+    $tenorLimit = number_format(nasabahTenor()->SALDO * 10 / 100, 0, '.', '');
+    if ($pinjaman <= $tenorLimit) {
+      if (nasabahInsert($_POST)) {
+        set_flash_data('berhasil', 'Data Berhasil Disimpan!');
+      }
+    } else {
+      set_flash_data('gagal', 'Pinjaman Melebihi Batas Tenor!');
+    }
+  } else {
+    set_flash_data('gagal', 'Saldo Tidak Cukup!');
+  }
 }
+
 
 if (isset($_POST['hapus'])) {
     if (adminHapus($_POST)) {
@@ -218,10 +230,9 @@ if (isset($_POST['edit'])) {
             <label for="tenor">Tenor</label>
             <select name="tenor" class="form-control" id="tenor" onchange="">
               <option selected disabled>Pilih salah satu...</option>
-              <option value="1">1 Bulan - Bunga 5% </option>
-              <option value="3">3 Bulan - Bunga 10%</option>
-              <option value="6">6 Bulan - Bunga 15%</option>
-              <option value="12">12 Bulan - Bunga 20%</option>
+              <?php $conn = globalfun(); foreach (mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM tenor")) as $data) { ?>
+              <option value="<?= $data[0]?>"><?= $data[1]." Bulan - Bunga ".$data[2]." %"?></option>
+              <?php }?>
             </select>
           </div>
           <!-- end pinjaman -->
