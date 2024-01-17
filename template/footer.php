@@ -87,7 +87,7 @@
 	<!-- <script src="../assets/js/setting-demo.js"></script> -->
 	<?php
 	$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-	if (strpos($actual_link, 'dashboard/index.php') !== false ) { ?>
+	if (strpos($actual_link, 'nasabah/index.php') !== false ) { ?>
 		<script src="<?= base_url('assets/js/demo.js')?>"></script>
 	<?php } ?>
 
@@ -183,7 +183,7 @@
 	function showFields() {
 		var kategoriSelect = document.getElementById("kategoriSelect");
 		var nominalKeteranganFields = document.getElementById("nominalKeteranganFields");
-		var keteranganFields = document.getElementById("keteranganFields");
+		var keteranganFields = document.getElementById("keterangan");
 		var tenorFields = document.getElementById("tenorFields");
 
 		if (kategoriSelect.value === "tabungan") {
@@ -205,23 +205,46 @@
 		}
 
 	}
+
 	function validateNominal() {
-    var saldoNasabah = <?= countSaldo($_SESSION['nasabah']->id_user)->SALDO ?>;
-    var inputNominal = document.getElementById("nominal").value;
-    saldoNasabah = parseFloat(saldoNasabah);
-    inputNominal = parseFloat(inputNominal);
-    var batasMaksimal = <?= countSaldo($_SESSION['nasabah']->id_user)->SALDO ?>;
+		var saldoNasabah = <?= countSaldo($_SESSION['nasabah']->id_user)->SALDO ?>;
+		var inputNominal = document.getElementById("nominal").value;
+		saldoNasabah = parseFloat(saldoNasabah);
+		inputNominal = parseFloat(inputNominal);
+		var batasMaksimal = <?= countSaldo($_SESSION['nasabah']->id_user)->SALDO ?>;
 
-    if (inputNominal > batasMaksimal) {
-      var errorAlert = document.getElementById("errorAlert");
-      errorAlert.innerHTML = "Nominal Melebihi Batas Saldo!";
-      errorAlert.style.display = "block";
+		if (inputNominal > batasMaksimal) {
+		var errorAlert = document.getElementById("errorAlert");
+		errorAlert.innerHTML = "Nominal Melebihi Batas Saldo!";
+		errorAlert.style.display = "block";
+		keterangan.style.display = "none";
+	} else {
+		var errorAlert = document.getElementById("errorAlert");
+		keterangan.style.display = "block";
+		errorAlert.style.display = "none";
+		}
+	}
 
-    } else {
-      var errorAlert = document.getElementById("errorAlert");
-      errorAlert.style.display = "none";
-    }
-  }
+	
+	function validateNominal2() {
+		var saldoNasabah = <?= nasabahTenor()->SALDO * 10 / 100 ?>;
+		var inputNominal = document.getElementById("pinjaman").value;
+		saldoNasabah = parseFloat(saldoNasabah);
+		inputNominal = parseFloat(inputNominal);
+		var batasMaksimal = <?= nasabahTenor()->SALDO * 10 / 100 ?>;
+
+		if (inputNominal > batasMaksimal) {
+		var errorAlert = document.getElementById("errorAlert");
+		errorAlert.innerHTML = "Nominal Melebihi Batas Limit!";
+		errorAlert.style.display = "block";
+		tenorFields.style.display = "none";
+	} else {
+		var errorAlert = document.getElementById("errorAlert");
+		errorAlert.style.display = "none";
+		tenorFields.style.display = "block";
+		}
+	}
+
 </script>
 </body>
 </html>

@@ -11,9 +11,13 @@ include(__DIR__.'/../template/sitebar.php');
 include(__DIR__.'./../Controller/PengeluaranController.php');
 
 
-// var_dump(countSaldo($_SESSION['nasabah']->id_user)->SALDO);
 if (isset($_POST['tambah'])) {
-    if (htmlspecialchars($_POST['nominal']) <= nasabahPemasukan($_SESSION['nasabah']->id_user)->SALDO) {
+  var_dump($_POST['pinjaman']); die;
+    if (htmlspecialchars($_POST['nominal']) <= countSaldo($_SESSION['nasabah']->id_user)->SALDO) {
+      if (nasabahInsert($_POST)) {
+        set_flash_data('berhasil', 'Data Berhasil Disimpan!');
+      }
+    } elseif (htmlspecialchars($_POST['pinjaman']) <= number_format(nasabahTenor()->SALDO * 10 / 100,0,'.','')) {
       if (nasabahInsert($_POST)) {
         set_flash_data('berhasil', 'Data Berhasil Disimpan!');
       }
@@ -182,11 +186,11 @@ if (isset($_POST['edit'])) {
       <div class="modal-body">
         <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;"></div>
         <form method="POST" action="">
-            <div class="form-group">
-              <label for="formGroupExampleInput2">Nama Nasabah</label>
-              <input type="text" name="nama" class="form-control" aria-label="Default select example" required placeholder="Nama Nasabah" value="<?php echo $_SESSION['nasabah']->nama?>" readonly>
-            </div>
-            <div class="form-group">
+          <div class="form-group">
+            <label for="formGroupExampleInput2">Nama Nasabah</label>
+            <input type="text" name="nama" class="form-control" aria-label="Default select example" required placeholder="Nama Nasabah" value="<?php echo $_SESSION['nasabah']->nama?>" readonly>
+          </div>
+          <div class="form-group">
             <label for="formGroupExampleInput2">Kategori</label>
             <select class="form-control" name="kategori" id="kategoriSelect" onchange="showFields()">
               <option selected disabled>Pilih Salah Satu...</option>
@@ -197,25 +201,27 @@ if (isset($_POST['edit'])) {
           <!-- tabungan -->
           <div class="form-group" id="nominalKeteranganFields" style="display: none;">
             <label for="formGroupExampleInput2">Nominal</label>
-            <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Jumlah Tabungan Anda : <?= rupiah(countSaldo($_SESSION['nasabah']->id_user)->SALDO)?>" required oninput="validateNominal()">
+            <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Jumlah Tabungan Anda : <?= rupiah(countSaldo($_SESSION['nasabah']->id_user)->SALDO)?>" oninput="validateNominal()">
           </div>
-          <div class="form-group" id="keteranganFields" style="display: none;">
-            <label for="formGroupExampleInput2">Keterangan</label>
-            <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan" required></textarea>
+          <div class="form-group" id="keterangan" style="display: none;">
+            <label>Keterangan</label>
+            <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan"></textarea>
           </div>
           <!-- end tabungan -->
           <!-- pinjaman -->
           <div class="form-group" id="pinjamanNominal" style="display: none;">
             <label>Nominal</label>
-            <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Limit Peminjaman Anda : <?= rupiah(countSaldo($_SESSION['nasabah']->id_user)->SALDO)?>" required oninput="validateNominal()">
+            <?php $limit = nasabahTenor()->SALDO * 10 / 100; ?>
+            <input type="number" class="form-control" name="pinjaman" id="pinjaman" placeholder="Limit Peminjaman Anda : <?= rupiah($limit)?>" oninput="validateNominal2()">
           </div>
           <div class="form-group" id="tenorFields" style="display: none;">
             <label for="tenor">Tenor</label>
-            <select name="tenor" class="form-control" id="tenor" onchange="validateNominal()">
-              <option value="1">1 Bulan</option>
-              <option value="3">3 Bulan</option>
-              <option value="6">6 Bulan</option>
-              <option value="12">12 Bulan</option>
+            <select name="tenor" class="form-control" id="tenor" onchange="">
+              <option selected disabled>Pilih salah satu...</option>
+              <option value="1">1 Bulan - Bunga 5% </option>
+              <option value="3">3 Bulan - Bunga 10%</option>
+              <option value="6">6 Bulan - Bunga 15%</option>
+              <option value="12">12 Bulan - Bunga 20%</option>
             </select>
           </div>
           <!-- end pinjaman -->

@@ -144,12 +144,12 @@
 							<li class="nav-item
 							<?php 
 								$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-								$active_class = (strpos($actual_link, 'bunga') !== false) ? 'active' : '';
+								$active_class = (strpos($actual_link, 'tenor') !== false) ? 'active' : '';
 								echo $active_class;
 							?>">
-								<a href="<?= base_url('dashboard/bunga.php')?>">
+								<a href="<?= base_url('dashboard/tenor.php')?>">
 								<i class="fas fa-percent"></i>
-										<p>Bunga</p>
+										<p>Tenor</p>
 								</a>
 							</li>
 						<?php }?>

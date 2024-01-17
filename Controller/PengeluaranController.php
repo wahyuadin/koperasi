@@ -155,4 +155,9 @@ function nasabahInsert($data) {
     }
 }
 
+function nasabahTenor() {
+    $conn       = globalfun();
+    return mysqli_fetch_object(mysqli_query($conn, "SELECT (SUM(pemasukan))-(SUM(pengeluaran)) as SALDO FROM master"));
+}
+
 ?>  
