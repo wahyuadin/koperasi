@@ -1,6 +1,6 @@
 <?php
 session_start();
-$judul = 'Pengajuan Pemasukan';
+$judul = 'Pengajuan Pengeluaran';
 include(__DIR__.'/../template/header.php');
 if (!isset($_SESSION['users'])) {
 	return header('location:'.base_url());
@@ -11,7 +11,7 @@ include(__DIR__.'/../template/sitebar.php');
 include(__DIR__.'/../Controller/RiwayatController.php');
 
 if (isset($_POST['acc'])) {
-    if (accPemasukan($_POST)) {
+    if (accPengeluaran($_POST)) {
         set_flash_data('berhasil', 'Data Berhasil Disimpan!');
     }  
 }
@@ -36,13 +36,13 @@ if (isset($_POST['reject'])) {
 								<i class="flaticon-right-arrow"></i>
 							</li>
                             <li>
-                                <a>Pemasukan Report</a>
+                                <a>Pengeluaran Report</a>
                             </li>
 							<li class="separator">
 								<i class="flaticon-right-arrow"></i>
 							</li>
 							<li class="nav-item">
-								<a href="<?= base_url('dashboard/pengajuan-pemasukan.php')?>"><?= $judul?></a>
+								<a href="<?= base_url('dashboard/pengajuan-pengeluaran.php')?>"><?= $judul?></a>
 							</li>
 						</ul>
 					</div>
@@ -86,7 +86,7 @@ if (isset($_POST['reject'])) {
 												"SELECT riwayat_transaksi.id_transaksi, users.nama, riwayat_transaksi.kategori, riwayat_transaksi.nominal, riwayat_transaksi.ket, riwayat_transaksi.timestamp
                                                 FROM users
                                                 INNER JOIN riwayat_transaksi ON riwayat_transaksi.id_user = users.id_user
-                                                WHERE riwayat_transaksi.acc = '0' AND riwayat_transaksi.kategori = 'pemasukan'")) as $data) { ?>
+                                                WHERE riwayat_transaksi.acc = '0' AND riwayat_transaksi.kategori = 'pengeluaran'")) as $data) { ?>
                                                 <tr>
                                                     <!-- <?php var_dump($data)?> -->
 													<td><?= $no++?></td>

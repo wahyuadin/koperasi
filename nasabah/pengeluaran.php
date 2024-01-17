@@ -10,32 +10,30 @@ include(__DIR__.'/../template/sitebar.php');
 
 include(__DIR__.'./../Controller/PengeluaranController.php');
 
-if (isset($_POST['tambah'])) {
-  $nominal  = isset($_POST['nominal']) ? htmlspecialchars($_POST['nominal']) : NULL;
-  $pinjaman = isset($_POST['pinjaman']) ? htmlspecialchars($_POST['pinjaman']) : NULL;
-
-  if ($nominal !== NULL) {
-    $saldo = countSaldo($_SESSION['nasabah']->id_user)->SALDO;
-    if ($nominal <= $saldo) {
+if (isset($_POST['submitTabungan'])) {
+  $saldo = countSaldo($_SESSION['nasabah']->id_user)->SALDO;
+  if (htmlspecialchars($_POST['nominal'] <= $saldo)) { 
       if (nasabahInsert($_POST)) {
-        set_flash_data('berhasil', 'Data Berhasil Disimpan!');
+          set_flash_data('berhasil', 'Data Berhasil Disimpan!');
       }
-    } else {
-      set_flash_data('gagal', 'Saldo Tidak Cukup!');
-    }
-  } elseif ($pinjaman !== NULL) {
-    $tenorLimit = number_format(nasabahTenor()->SALDO * 10 / 100, 0, '.', '');
-    if ($pinjaman <= $tenorLimit) {
-      if (nasabahInsert($_POST)) {
-        set_flash_data('berhasil', 'Data Berhasil Disimpan!');
-      }
-    } else {
-      set_flash_data('gagal', 'Pinjaman Melebihi Batas Tenor!');
-    }
   } else {
-    set_flash_data('gagal', 'Saldo Tidak Cukup!');
+    set_flash_data('gagal', 'Nominal Melebihi Batas Saldo!');
   }
 }
+
+if (isset($_POST['submitPinjaman'])) {
+  if (htmlspecialchars($_POST['pinjaman']) <= nasabahTenor()->SALDO * 10 / 100) {
+    if (submitSimpan($_POST)) {
+        alert('Pengajuan berhasil ! tunggu admin hingga menyetujui');
+        $script = "<script>
+        window.location = '".base_url('nasabah/history.php')."';</script>";
+        echo $script;
+    }
+  } else {
+    set_flash_data('gagal', 'Nominal Melebihi Batas Saldo!');
+  }
+}
+
 
 
 if (isset($_POST['hapus'])) {
@@ -99,7 +97,6 @@ if (isset($_POST['edit'])) {
 													<th>Nominal</th>
 													<th>Keterangan</th>
 													<th>Waktu</th>
-													<!-- <th>Action</th> -->
 												</tr>
 											</thead>
 											<tbody>
@@ -110,69 +107,7 @@ if (isset($_POST['edit'])) {
 													<td><?= rupiah($data[5])?></td>
 													<td><?= $data[6];?></td>
 													<td><?= $data[7];?></td>
-													<td>
-                              <!-- <a style="color: white;" class="btn btn-success btn-sm" data-toggle="modal" data-target="#edit<?=$data['2']?>"><i class="fas fa-info-circle" style="margin-right: 10px;"></i>Edit</a>
-                              <button type="button" href="<?= base_url('dashboard/hapus-pengeluaran.php?detail=').$data['2']?>" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#hapus<?=$data['2']?>"><i class="fas fa-info-circle" style="margin-right: 10px;"></i>Hapus</button> -->
-                          </td>
 												</tr>
-                        <!-- Modal Hapus -->
-                        <div class="modal fade" id="hapus<?=$data['2']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h5 class="modal-title" id="exampleModalLabel">Hapus Data</h5>
-                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                  </button>
-                                </div>
-                                <input type="text" name="id" value="<?= $data['2']?>" readonly hidden>
-                                <div class="modal-body">
-                                  Apakah anda yakin menghapus data ?
-                                </div>
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                  <form action="" method="POST">
-                                    <input type="text" name="id" value="<?=$data['2']?>" readonly hidden>
-                                    <button type="submit" name="hapus" class="btn btn-danger">Hapus</button>
-                                  </form>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        <!-- Modal Edit Data -->
-                        <div class="modal fade" id="edit<?=$data['2']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered" role="document">
-                            <div class="modal-content">
-                              <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLongTitle">Edit <?= $judul?></h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                  <span aria-hidden="true">&times;</span>
-                                </button>
-                              </div>
-                              <div class="modal-body">
-                                <form method="POST" action="">
-                                    <div class="form-group">
-                                        <label for="formGroupExampleInput2">Nama Nasabah</label>
-                                        <input type="text" class="form-control" name="nama" value="<?= $data['3']?>" id="formGroupExampleInput2" placeholder="Nama Nasabah" required readonly>
-                                        <input type="text" class="form-control" name="id" value="<?= $data['1']?>" id="formGroupExampleInput2" placeholder="Nama Nasabah" required readonly hidden>
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="formGroupExampleInput2">Keterangan</label>
-                                        <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan" required><?= $data['6']?></textarea>
-                                        <!-- <input type="text" class="form-control" name="ket" placeholder="Keterangan" requireq> -->
-                                    </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                <button type="submit" name="edit" class="btn btn-primary">Simpan</button>
-                              </div>
-                              </form>
-                            </div>
-                          </div>
-                        </div>
-                        <!-- end modal -->
-
                         <?php } ?>
 											</tbody>
 										</table>
@@ -197,7 +132,6 @@ if (isset($_POST['edit'])) {
       </div>
       <div class="modal-body">
         <div id="errorAlert" class="alert alert-danger" role="alert" style="display: none;"></div>
-        <form method="POST" action="">
           <div class="form-group">
             <label for="formGroupExampleInput2">Nama Nasabah</label>
             <input type="text" name="nama" class="form-control" aria-label="Default select example" required placeholder="Nama Nasabah" value="<?php echo $_SESSION['nasabah']->nama?>" readonly>
@@ -211,37 +145,47 @@ if (isset($_POST['edit'])) {
             </select>
           </div>
           <!-- tabungan -->
+          <form action="" method="POST">
           <div class="form-group" id="nominalKeteranganFields" style="display: none;">
             <label for="formGroupExampleInput2">Nominal</label>
-            <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Jumlah Tabungan Anda : <?= rupiah(countSaldo($_SESSION['nasabah']->id_user)->SALDO)?>" oninput="validateNominal()">
+            <input type="text" name="nama" class="form-control" aria-label="Default select example" required placeholder="Nama Nasabah" value="<?php echo $_SESSION['nasabah']->nama?>" readonly hidden>
+            <input type="number" class="form-control" name="nominal" id="nominal" placeholder="Jumlah Tabungan Anda : <?= rupiah(countSaldo($_SESSION['nasabah']->id_user)->SALDO)?>" oninput="validateNominal()" required>
           </div>
           <div class="form-group" id="keterangan" style="display: none;">
             <label>Keterangan</label>
-            <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan"></textarea>
+            <input type="text" name="nama" class="form-control" aria-label="Default select example" required placeholder="Nama Nasabah" value="<?php echo $_SESSION['nasabah']->nama?>" readonly hidden>
+            <textarea name="ket" class="form-control" cols="30" rows="4" placeholder="Keterangan" required></textarea>
           </div>
+          <div class="modal-footer" id="nominalFooter" style="display: none;">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" name="submitTabungan" class="btn btn-primary">Save changes</button>
+          </div>
+          </form>
           <!-- end tabungan -->
           <!-- pinjaman -->
+          <form action="" method="POST">
           <div class="form-group" id="pinjamanNominal" style="display: none;">
             <label>Nominal</label>
+            <input type="text" name="id_user" class="form-control" aria-label="Default select example" required placeholder="Nama Nasabah" value="<?php echo $_SESSION['nasabah']->id_user?>" readonly hidden>
             <?php $limit = nasabahTenor()->SALDO * 10 / 100; ?>
-            <input type="number" class="form-control" name="pinjaman" id="pinjaman" placeholder="Limit Peminjaman Anda : <?= rupiah($limit)?>" oninput="validateNominal2()">
+            <input type="number" class="form-control" name="pinjaman" id="pinjaman" placeholder="Limit Peminjaman Anda : <?= rupiah($limit)?>" oninput="validateNominal2()" required>
           </div>
           <div class="form-group" id="tenorFields" style="display: none;">
             <label for="tenor">Tenor</label>
-            <select name="tenor" class="form-control" id="tenor" onchange="">
+            <select name="tenor" class="form-control" id="tenor" onchange="" required>
               <option selected disabled>Pilih salah satu...</option>
               <?php $conn = globalfun(); foreach (mysqli_fetch_all(mysqli_query($conn, "SELECT * FROM tenor")) as $data) { ?>
               <option value="<?= $data[0]?>"><?= $data[1]." Bulan - Bunga ".$data[2]." %"?></option>
               <?php }?>
             </select>
           </div>
+          <div class="modal-footer" id="pinjamanFooter" style="display: none;">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" name="submitPinjaman" class="btn btn-primary">Save changes</button>
+          </div>
+          </form>
           <!-- end pinjaman -->
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" name="tambah" class="btn btn-primary">Save changes</button>
-      </div>
-      </form>
     </div>
   </div>
 </div>

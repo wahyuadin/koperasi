@@ -126,7 +126,7 @@
 											</a>
 										</li>
 										<li>
-											<a href="<?= base_url('nasabah/detail-user.php')?>">
+											<a href="<?= base_url('dashboard/pengajuan-pengeluaran.php')?>">
 												<span class="sub-item">Pengajuan Pengeluaran</span>
 											</a>
 										</li>

@@ -190,18 +190,23 @@
 			nominalKeteranganFields.style.display = "block";
 			keteranganFields.style.display = "block";
 			pinjamanNominal.style.display = "none";
+			nominalFooter.style.display = "block"
 			tenorFields.style.display = "none";
+			pinjamanFooter.style.display = "none";
 		} else if (kategoriSelect.value === "pinjaman") {
 			pinjamanNominal.style.display = "block";
 			tenorFields.style.display = "block";
-
+			nominalFooter.style.display = "none"
 			nominalKeteranganFields.style.display = "none";
 			keteranganFields.style.display = "none";
+			pinjamanFooter.style.display = "block";
 		} else {
 			pinjamanNominal.style.display = "none";
 			nominalKeteranganFields.style.display = "none";
 			keteranganFields.style.display = "none";
+			nominalFooter.style.display = "none"
 			tenorFields.style.display = "none";
+			pinjamanFooter.style.display = "none";
 		}
 
 	}
