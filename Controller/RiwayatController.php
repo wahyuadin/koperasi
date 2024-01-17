@@ -1,11 +1,11 @@
 <?php
 
-
-// NASABAH
 function globalfun() {
     include(__DIR__.'/../koneksi.php');
     return $conn;
 }
+
+// NASABAH
 
 function saldoNasabah($data) {
     $conn = globalfun();

@@ -159,6 +159,24 @@
 							</span>
 							<h4 class="text-section">NASABAH</h4>
 						</li>
+						<?php
+						$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+						$tagihan = (strpos($actual_link, 'tagihan') !== false) ? 'active' : '';
+						if (isset($_SESSION['users'])) {?>
+							<li class="nav-item <?= $tagihan?>">
+								<a href="<?= base_url('dashboard/tagihan.php')?>">
+									<i class="fas fa-credit-card"></i>
+									<p>Data Tagihan</p>
+								</a>
+							</li>
+							<?php } else { ?>
+								<li class="nav-item <?= $tagihan?>">
+									<a href="<?= base_url('nasabah/tagihan.php')?>">
+										<i class="fas fa-credit-card"></i>
+										<p>Data Tagihan</p>
+									</a>
+								</li>
+						<?php }  ?>
 						<li class="nav-item
 						<?php 
 							$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
@@ -177,14 +195,6 @@
 							</a>
 						<?php }?>
 						</li>
-						<?php if (isset($_SESSION['sds'])) {?>
-							<li class="nav-item">
-								<a href="boards.html">
-									<i class="fas fa-th-list"></i>
-									<p>Boards</p>
-								</a>
-							</li>
-						<?php } ?>
 						<?php if (isset($_SESSION['users'])) { ?>
 						<li class="nav-item">
 							<a data-toggle="collapse" href="#user">
