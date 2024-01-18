@@ -2,7 +2,7 @@
 session_start();
 $judul = 'Data Tagihan';
 include(__DIR__.'/../template/header.php');
-if (!isset($_SESSION['users'])) {
+if (!isset($_SESSION['nasabah'])) {
 	return header('location:'.base_url());
 }
 include(__DIR__.'/../template/navbar_header.php');
@@ -11,13 +11,7 @@ include(__DIR__.'/../template/sitebar.php');
 include(__DIR__.'/../Controller/TagihanController.php');
 
 if (isset($_POST['bayar'])) {
-	if (bayar($_POST)) {
-		set_flash_data('berhasil', 'Data Berhasil Disimpan!');
-	}
-}
-
-if (isset($_POST['reject'])) {
-	if (reject($_POST)) {
+	if (bayarNasabah($_POST)) {
 		set_flash_data('berhasil', 'Data Berhasil Disimpan!');
 	}
 }
@@ -80,10 +74,11 @@ if (isset($_POST['reject'])) {
                                             <?php $no =1;?>
 											<tbody>
                                                 <?php $conn = globalfun();
+                                                $id_user = $_SESSION['nasabah']->id_user;
 												foreach (mysqli_fetch_all(mysqli_query($conn,
-												"SELECT transaksi.id_transaksi, tenor.bulan, tenor.persen, transaksi.nominal, transaksi.timestamp, transaksi.acc, transaksi.id_user, transaksi.id
+												"SELECT transaksi.id_transaksi, tenor.bulan, tenor.persen, transaksi.nominal, transaksi.timestamp, transaksi.acc, transaksi.id_user, transaksi.id_user
                                                 FROM transaksi
-                                                INNER JOIN tenor ON tenor.id = transaksi.id_tenor")) as $data) { ?>
+                                                INNER JOIN tenor ON tenor.id = transaksi.id_tenor WHERE id_user='$id_user'")) as $data) { ?>
                                                 <tr>
 													<td><?= $no++?></td>
 													<td><?= mysqli_fetch_object(mysqli_query($conn,"SELECT * FROM users WHERE id_user='$data[6]'"))->nama?> </td>
@@ -102,7 +97,6 @@ if (isset($_POST['reject'])) {
                                                     </td>
                                                     <td>
 														<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#bayar<?=$data[7]?>" name="bayar"><i class="fas fa-dollar-sign" style="margin-right: 8px;"></i>Bayar</button>
-														<button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#reject<?=$data[7]?>"><i class="fas fa-times" style="margin-right: 8px;"></i>Reject</button>
 													</td>
 												</tr>
 
@@ -124,32 +118,6 @@ if (isset($_POST['reject'])) {
 															<input type="text" name="id_transaksi" value="<?=$data[7]?>" hidden readonly>
 															<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 															<button type="submit" name="bayar" class="btn btn-primary">Bayar</button>
-														</form>
-													</div>
-													</div>
-												</div>
-												</div>
-												<!-- end modal -->
-
-												<!-- Modal Reject -->
-												<div class="modal fade" id="reject<?= $data[7]?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-												<div class="modal-dialog modal-dialog-centered" role="document">
-													<div class="modal-content">
-													<div class="modal-header">
-														<h5 class="modal-title" id="exampleModalLongTitle"><?= $judul?></h5>
-														<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-														</button>
-													</div>
-													<div class="modal-body">
-														<p>Apakah Yakin Untuk Mereject data ?</p>
-													</div>
-													<div class="modal-footer">
-														<form action="" method="POST">
-															<input type="text" name="id_transaksi" value="<?=$data[7]?>" hidden readonly>
-															<input type="text" name="tes" value="<?=$data[7]?>" hidden readonly>
-															<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-															<button type="submit" name="reject" class="btn btn-primary">Reject</button>
 														</form>
 													</div>
 													</div>
