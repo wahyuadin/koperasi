@@ -1,6 +1,8 @@
 <?php
 session_start();
 $judul = 'Data Tagihan';
+$id_user = $_SESSION['nasabah']->id_user;
+
 include(__DIR__.'/../template/header.php');
 if (!isset($_SESSION['nasabah'])) {
 	return header('location:'.base_url());
@@ -9,10 +11,13 @@ include(__DIR__.'/../template/navbar_header.php');
 include(__DIR__.'/../template/sitebar.php');
 
 include(__DIR__.'/../Controller/TagihanController.php');
-
+$conn = globalfun();
 if (isset($_POST['bayar'])) {
-	if (bayarNasabah($_POST)) {
-		set_flash_data('berhasil', 'Data Berhasil Disimpan!');
+	if (bayarNasabah($_SESSION)) {
+		alert('Pengajuan berhasil ! tunggu admin hingga menyetujui');
+		$script = "<script>
+		window.location = '".base_url('nasabah/history.php')."';</script>";
+		echo $script;
 	}
 }
 
@@ -73,8 +78,7 @@ if (isset($_POST['bayar'])) {
 											</thead>
                                             <?php $no =1;?>
 											<tbody>
-                                                <?php $conn = globalfun();
-                                                $id_user = $_SESSION['nasabah']->id_user;
+                                                <?php
 												foreach (mysqli_fetch_all(mysqli_query($conn,
 												"SELECT transaksi.id_transaksi, tenor.bulan, tenor.persen, transaksi.nominal, transaksi.timestamp, transaksi.acc, transaksi.id_user, transaksi.id_user
                                                 FROM transaksi
@@ -88,16 +92,20 @@ if (isset($_POST['bayar'])) {
 													<td><?= $data[4];?></td>
 													<td>
 														<?php if ($data[5] == '0') { ?>
-														<span class="badge badge-pill badge-warning">Pending</span>
+															<span class="badge badge-pill badge-warning">Pending</span>
 														<?php } elseif ($data[5] == '3') { ?>
 															<span class="badge badge-pill badge-danger">Reject</span>
+                                                        <?php } elseif ($data[5] == '9') { ?>
+                                                            <span class="badge badge-pill badge-warning">Pending</span>
                                                         <?php } else { ?>
-                                                            <span class="badge badge-pill badge-success">Accept</span>
-                                                        <?php } ?>
+															<span class="badge badge-pill badge-success">Accept</span>
+														<?php } ?>
                                                     </td>
+													<?php if (!$data[5] == '2') { ?>
                                                     <td>
 														<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#bayar<?=$data[7]?>" name="bayar"><i class="fas fa-dollar-sign" style="margin-right: 8px;"></i>Bayar</button>
 													</td>
+													<?php } ?>
 												</tr>
 
 												<!-- Modal Accept -->
@@ -111,11 +119,12 @@ if (isset($_POST['bayar'])) {
 														</button>
 													</div>
 													<div class="modal-body">
+														<p><?php var_dump($data)?></p>
 														<p>Apakah Yakin Untuk Memilih data ?</p>
 													</div>
 													<div class="modal-footer">
 														<form action="" method="POST">
-															<input type="text" name="id_transaksi" value="<?=$data[7]?>" hidden readonly>
+															<input type="text" name="id" value="<?=$data[7]?>" hidden readonly>
 															<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 															<button type="submit" name="bayar" class="btn btn-primary">Bayar</button>
 														</form>

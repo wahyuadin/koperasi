@@ -218,26 +218,16 @@
 							</div>
 						</li>
 						<?php } else { ?>
-							<li class="nav-item">
-								<a data-toggle="collapse" href="#user">
+							<li class="nav-item
+							<?php 
+								$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+								$active_class = (strpos($actual_link, 'user') !== false) ? 'active' : '';
+								echo $active_class;
+							?>">
+								<a href="<?= base_url('nasabah/user.php')?>">
 									<i class="far fa-user"></i>
 									<p>User</p>
-									<span class="caret"></span>
 								</a>
-								<div class="collapse" id="user">
-									<ul class="nav nav-collapse">
-										<li>
-											<a href="<?= base_url('nasabah/user.php')?>">
-												<span class="sub-item">Data User</span>
-											</a>
-										</li>
-										<li>
-											<a href="<?= base_url('nasabah/detail-user.php')?>">
-												<span class="sub-item">Detail User</span>
-											</a>
-										</li>
-									</ul>
-								</div>
 							</li>
 						<?php } ?>
 						<!-- <li class="nav-item">
