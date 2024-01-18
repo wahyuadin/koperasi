@@ -21,8 +21,11 @@ if (isset($_POST['verif'])) {
         'kecamatan'     => htmlentities($_POST['kecamatan']),
         'kelurahan'     => htmlentities($_POST['kelurahan']),
         'rt'            => htmlentities($_POST['rt']),
-        'ktp'           => htmlspecialchars($_POST['ktp']),
+        'ktp'           => $_FILES['ktp']['name'],
+        'tmp_name'      => $_FILES["ktp"]["tmp_name"],
+        'size'          => $_FILES["ktp"]["size"]
     ];
+
     return index($data);
 
 }
@@ -202,9 +205,23 @@ if (isset($_POST['verif'])) {
       <h2>Halaman Verifikasi</h2>
       <p class="lead">Terimakasih sudah mendaftar pada aplikasi kami. Sebelum melanjutkan, mohon untuk calon nasabah agar lengkapi data diri berikut.</p>
     </div>
+    <?php
+                  $gagal = get_flash_data('gagal');
+                  if ($gagal) { ?>
+                  <div class="alert alert-danger" role="alert">
+                      <?= $gagal;?>
+                  </div>
+                  <?php } ?>
+                  <?php
+                  $berhasil = get_flash_data('berhasil');
+                  if ($berhasil) { ?>
+                  <div class="alert alert-success" role="alert">
+                      <?= $berhasil;?>
+                  </div>
+                  <?php } ?>
     <div class="row g-5">
       <div class="col-md-7 col-lg-12">
-        <form class="needs-validation" method="POST" action="">
+        <form class="needs-validation" method="POST" action="" enctype="multipart/form-data">
           <div class="row g-3">
             <div class="col-sm-6">
               <label for="firstName" class="form-label">ID Nasabah</label>

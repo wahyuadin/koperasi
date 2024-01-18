@@ -87,7 +87,7 @@
 	<!-- <script src="../assets/js/setting-demo.js"></script> -->
 	<?php
 	$actual_link = "$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-	if (strpos($actual_link, 'nasabah/index.php') !== false ) { ?>
+	if (strpos($actual_link, 'index.php') !== false ) { ?>
 		<script src="<?= base_url('assets/js/demo.js')?>"></script>
 	<?php } ?>
 

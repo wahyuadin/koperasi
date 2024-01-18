@@ -18,8 +18,8 @@ Circles.create({
 //Notify
 $.notify({
 	icon: 'flaticon-alarm-1',
-	title: 'Atlantis',
-	message: 'Premium Bootstrap 4 Admin Dashboard',
+	title: 'KSP Mugi Lestari',
+	message: 'Aplikasi Koperasi Digital',
 },{
 	type: 'secondary',
 	placement: {

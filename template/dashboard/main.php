@@ -121,7 +121,7 @@ include(__DIR__.'/../../Controller/DashboardController.php');
 												<td><?= kelurahan($data[6], $data[7])?></td>
 												<td><?= $data[8]?></td>
 												<td>
-													<a class="btn btn-primary btn-sm" href="<?=base_url('assets/gambar/ktp/'.$data[9])?>">Lihat Gambar</a>
+													<a class="btn btn-primary btn-sm" href="<?=base_url('assets/gambar/'.$data[9])?>">Lihat Gambar</a>
 												</td>
 											</tr>
 										<?php } ?>

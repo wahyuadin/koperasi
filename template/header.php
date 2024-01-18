@@ -37,7 +37,7 @@
 		<!-- Logo Header -->
 		<div class="logo-header position-fixed" data-background-color="dark">
 			<a href="<?= base_url()?>" class="logo">
-				<img src="<?= base_url('assets/img/logo.svg')?>" alt="navbar brand" class="navbar-brand">
+				<img src="<?= base_url('assets/img/tes.svg')?>" alt="NetsinCode" class="navbar-brand">
 			</a>
 			<button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon">

@@ -8,7 +8,7 @@ if (!isset($_SESSION['users'])) {
 include(__DIR__.'/../template/navbar_header.php');
 include(__DIR__.'/../template/sitebar.php');
 
-include(__DIR__.'./../Controller/UserController.php');
+include(__DIR__.'/../Controller/UserController.php');
 
 if (isset($_POST['acc'])) {
   if (adminAcc($_POST)) {

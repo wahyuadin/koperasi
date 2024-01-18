@@ -3,7 +3,11 @@
 				<div class="sidebar-content">
 					<div class="user">
 						<div class="avatar-sm float-left mr-2">
-							<img src="<?= base_url('assets/img/profile.jpg')?>" alt="..." class="avatar-img rounded-circle">
+							<?php if (isset($_SESSION['users'])) { ?>
+								<img src="<?= base_url('assets/gambar/'.$_SESSION['users']->foto)?>" alt="..." class="avatar-img rounded-circle">
+							<?php } else { ?>
+								<img src="<?= base_url('assets/gambar/'.$_SESSION['nasabah']->foto)?>" alt="..." class="avatar-img rounded-circle">
+							<?php } ?>
 						</div>
 						<div class="info">
 							<a data-toggle="collapse" h aria-expanded="true">
