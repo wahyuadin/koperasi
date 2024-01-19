@@ -66,13 +66,5 @@ function kelurahan($kec, $id) {
 
 }
 
-function pdfNasabah() {
-    include(__DIR__.'/../fpdf.php');
-    $result = nasabahGetData($_SESSION['nasabah']->id_user);
-    
-    $pdf=new FPDF('P','mm','A4');
-    $pdf->AddPage();
-}
-
 
 ?>

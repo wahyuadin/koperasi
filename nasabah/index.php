@@ -1,8 +1,10 @@
 <?php 
 session_start();
 $judul = "Halaman Dashboard";
-include(__DIR__.'/../library/fpdf.php');
 include(__DIR__.'/../template/header.php');
+if (isset($_POST['print'])) {
+	return header('location:'.base_url("nasabah/pdf.php"));
+}
 if (!isset($_SESSION['nasabah'])) {
 	return header('location:'.base_url());
 }
@@ -13,56 +15,8 @@ include(__DIR__.'/../template/sitebar.php');
 include(__DIR__.'/../Controller/MasterController.php');
 include(__DIR__.'/../Controller/DashboardController.php');
 
-class PDF extends FPDF {
-    // Fungsi untuk membuat header tabel
-    function Header() {
-        $this->SetFont('Arial', 'B', 12);
-        $this->Cell(10, 10, 'No', 1);
-        $this->Cell(30, 10, 'Nama', 1);
-        $this->Cell(40, 10, 'Alamat', 1);
-        $this->Cell(30, 10, 'Provinsi', 1);
-        $this->Cell(30, 10, 'Kabupaten', 1);
-        $this->Cell(30, 10, 'Kecamatan', 1);
-        $this->Cell(30, 10, 'Kelurahan', 1);
-        $this->Cell(20, 10, 'RT/RW', 1);
-        $this->Cell(30, 10, 'KTP', 1);
-        $this->Ln();
-    }
 
-    // Fungsi untuk membuat baris data
-    function Row($data) {
-        $this->SetFont('Arial', '', 12);
-        $this->Cell(10, 10, $data[0], 1);
-        $this->Cell(30, 10, $data[1], 1);
-        $this->Cell(40, 10, $data[2], 1);
-        $this->Cell(30, 10, $data[3], 1);
-        $this->Cell(30, 10, $data[4], 1);
-        $this->Cell(30, 10, $data[5], 1);
-        $this->Cell(30, 10, $data[6], 1);
-        $this->Cell(20, 10, $data[7], 1);
-        $this->Cell(30, 10, $data[8], 1);
-        $this->Ln();
-    }
-}
 
-if (isset($_POST['pdf'])) {
-	
-	// Buat objek PDF
-	$pdf = new PDF();
-	$pdf->AddPage();
-	
-	// Ambil data dari database (gunakan fungsi nasabahGetData sesuai kebutuhan Anda)
-	$dataArray = nasabahGetData($_SESSION['nasabah']->id_user);
-	
-	// Tambahkan data ke tabel
-	foreach ($dataArray as $data) {
-		$pdf->Row($data);
-	}
-	
-	// Output PDF
-	$pdf->Output();
-	
-}
 ?>	
 
 <div class="container">
@@ -139,14 +93,14 @@ if (isset($_POST['pdf'])) {
 									<div class="card-head-row">
 										<div class="card-title">Data Nasabah</div>
 										<div class="card-tools">
-											<form action="" method="POST">
-											<button type="submit" name="pdf" class="btn btn-info btn-border btn-round btn-sm">
+										<form action="" method="POST">
+											<button type="submit" name="print" class="btn btn-info btn-border btn-round btn-sm">
 												<span class="btn-label">
 													<i class="fa fa-print"></i>
 												</span>
 												Print
 											</button>
-											</form>
+										</form>
 										</div>
 									</div>
 								</div>

@@ -201,7 +201,7 @@ if (isset($_POST['verif'])) {
 <div class="container">
   <main>
     <div class="py-5 text-center">
-      <img class="d-block mx-auto mb-4" src="https://getbootstrap.com/docs/5.3/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57">
+      <img class="d-block mx-auto mb-4" src="<?= base_url('/assets/img/logo.png')?>" alt="" width="auto" height="150">
       <h2>Halaman Verifikasi</h2>
       <p class="lead">Terimakasih sudah mendaftar pada aplikasi kami. Sebelum melanjutkan, mohon untuk calon nasabah agar lengkapi data diri berikut.</p>
     </div>
