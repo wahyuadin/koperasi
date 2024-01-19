@@ -81,7 +81,7 @@ include(__DIR__.'/../../Controller/DashboardController.php');
 									<div class="card-head-row">
 										<div class="card-title">Data Nasabah</div>
 										<div class="card-tools">
-											<a href="#" class="btn btn-info btn-border btn-round btn-sm">
+											<a href="<?= base_url('dashboard/pdf.php')?>" class="btn btn-info btn-border btn-round btn-sm">
 												<span class="btn-label">
 													<i class="fa fa-print"></i>
 												</span>

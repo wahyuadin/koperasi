@@ -62,11 +62,10 @@ function index($data) {
             }
         }
       } else {
-        echo "error";
-            // alert('Maaf, terjadi kesalahan saat mengunggah file.');
-            // $script = "<script>
-            // window.location = '".base_url('auth/verifikasi.php')."';</script>";
-            // echo $script;
+            alert('Maaf, terjadi kesalahan saat mengunggah file.');
+            $script = "<script>
+            window.location = '".base_url('auth/verifikasi.php')."';</script>";
+            echo $script;
             $uploadOk = 0;
       }
     } else {
